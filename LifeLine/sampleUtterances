@@ -1,0 +1,10 @@
+SendSms yes
+SendSms send emergency
+SendSms get help
+SendSms call help
+SendSms send help
+SendSms call emergency
+SendSms get emergency
+SendSms text emergency
+SendSms please
+SendSms yes please
