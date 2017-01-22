@@ -6,18 +6,6 @@
  * For additional samples, visit the Alexa Skills Kit Getting Started guide at
  * http://amzn.to/1LGWsLG
  */
-var http = require('http');
-
-var dynamodb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
-dynamodb.batchGetItem(params, function (err, data) {
-  if (err) console.log(err, err.stack); // an error occurred
-  else     console.log(data);           // successful response
-});
-
-
-
-
-
 
 var Alexa = require('alexa-sdk');
 
@@ -28,8 +16,7 @@ var states = {
 };
 
 //callback_array
-var callback_array = [true, false, false, true, false, false, true];
-var callback_array2 = [false, false, true, false, true, false, false];
+var callbackarray = [true, false, false, true, false, false, true];
 
 // Questions
 var nodes = [
@@ -101,6 +88,23 @@ exports.handler = function (event, context, callback) {
 
 // set state to start up and  welcome the user
 var newSessionHandler = {
+	'RecallIntent': function() {
+      if (callbackarray[0])
+        this.emit(':tell', "The patient is lightheaded. ");
+    if (callbackarray[1])
+        this.emit(':tell', "The patient is having trouble breathing. ");
+    if (callbackarray[2])
+        this.emit(':tell', "The patient is bleeding. ");
+    if (callbackarray[3])
+        this.emit(':tell', "The patient is nauseous. ");
+    if (callbackarray[4])
+        this.emit(':tell', "The patient is burned. ");
+    if (callbackarray[5])
+        this.emit(':tell', "The patient is cut. ");
+    if (callbackarray[6])
+        this.emit(':tell', "The patient has a broken body part. ");
+ 
+    },
   'LaunchRequest': function () {
     this.handler.state = states.STARTMODE;
     this.emit(':ask', welcomeMessage, repeatWelcomeMessage);
@@ -118,6 +122,28 @@ var newSessionHandler = {
 
 // Called at the start of the game, picks and asks first question for the user
 var startGameHandlers = Alexa.CreateStateHandler(states.STARTMODE, {
+	'RecallIntent': function() {
+		var output_string = "";
+    if (callbackarray[0])
+        output_string += "The patient is lightheaded. ";
+    if (callbackarray[1])
+        output_string += "The patient is having trouble breathing. ";
+    if (callbackarray[2])
+        output_string += "The patient is bleeding. ";
+    if (callbackarray[3])
+        output_string += "The patient is nauseous. ";
+    if (callbackarray[4])
+        output_string += "The patient is burned. ";
+    if (callbackarray[5])
+        output_string += "The patient is cut. ";
+    if (callbackarray[6])
+        output_string += "The patient has a broken body part. ";
+ 	else 
+ 		console.log("AJ ERROR");
+
+ 	this.emit(":tell", output_string);
+
+    },
     'AMAZON.YesIntent': function () {
 
         // ---------------------------------------------------------------
@@ -169,6 +195,27 @@ var startGameHandlers = Alexa.CreateStateHandler(states.STARTMODE, {
 // response and then ask another question. If we have asked more than the requested number of questions Alexa will
 // make a choice, inform the user and then ask if they want to play again
 var askQuestionHandlers = Alexa.CreateStateHandler(states.ASKMODE, {
+	'RecallIntent': function() {
+     var output_string = "";
+    if (callbackarray[0])
+        output_string += "The patient is lightheaded. ";
+    if (callbackarray[1])
+        output_string += "The patient is having trouble breathing. ";
+    if (callbackarray[2])
+        output_string += "The patient is bleeding. ";
+    if (callbackarray[3])
+        output_string += "The patient is nauseous. ";
+    if (callbackarray[4])
+        output_string += "The patient is burned. ";
+    if (callbackarray[5])
+        output_string += "The patient is cut. ";
+    if (callbackarray[6])
+        output_string += "The patient has a broken body part. ";
+ 	else 
+ 		console.log("AJ ERROR");
+
+ 	this.emit(":tell", output_string);
+    },
 
     'AMAZON.YesIntent': function () {
         // Handle Yes intent.
@@ -199,6 +246,27 @@ var askQuestionHandlers = Alexa.CreateStateHandler(states.ASKMODE, {
 
 // user has heard the final choice and has been asked if they want to hear the description or to play again
 var descriptionHandlers = Alexa.CreateStateHandler(states.DESCRIPTIONMODE, {
+	'RecallIntent': function() {
+      var output_string = "";
+    if (callbackarray[0])
+        output_string += "The patient is lightheaded. ";
+    if (callbackarray[1])
+        output_string += "The patient is having trouble breathing. ";
+    if (callbackarray[2])
+        output_string += "The patient is bleeding. ";
+    if (callbackarray[3])
+        output_string += "The patient is nauseous. ";
+    if (callbackarray[4])
+        output_string += "The patient is burned. ";
+    if (callbackarray[5])
+        output_string += "The patient is cut. ";
+    if (callbackarray[6])
+        output_string += "The patient has a broken body part. ";
+ 	else 
+ 		console.log("AJ ERROR");
+
+ 	this.emit(":tell", output_string);
+    },
 
  'AMAZON.YesIntent': function () {
         // Handle Yes intent.
@@ -252,33 +320,6 @@ var helper = {
     // logic to provide the responses to the yes or no responses to the main questions
     yesOrNo: function (context, reply) {
         
-        // current node: context.attributes.currentNode
-        // reply is a string - 'yes' or 'no'
-        var headers = {
-            'Content-Type': 'application/json'
-        }
-        parameters = {
-            'answer': reply,
-            'question': context.attributes.currentNode,
-        }
-        var options = {
-            url: 'http://www.vincentyang.me/lifelineget',
-            method: 'GET',
-            headers: headers,
-            form: parameters
-        }
-        request(options, function(error, response, body) {
-            if (!error && response.statusCode == 200) {
-                var obj = JSON.parse(body);
-                console.log(JSON.parse(body));
-                res.send(resp);
-            }
-            else {
-                console.log("oh no");
-            }
-        }
-
-
         // this is a question node so we need to see if the user picked yes or no
         var nextNodeId = helper.getNextNode(context.attributes.currentNode, reply);
 
