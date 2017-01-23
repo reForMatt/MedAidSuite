@@ -7,3 +7,5 @@ Lifeline: Contact your emergency contact when you are unable to do so. In situat
 Medical Help: Walk you through emergency first aid procedure, and save the critical health information for your first responders to use. 
 "Alexa, open Medical Help" + "Yes/No"
 "Alexa, open Medical Help" + "Recall"
+
+[DevPost](https://devpost.com/software/medaidsuite)
